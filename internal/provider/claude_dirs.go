@@ -40,6 +40,18 @@ func claudeAccountDir(user string) string {
 	return filepath.Join(claudeDirsRoot(), hex.EncodeToString(sum[:])[:16])
 }
 
+// ClaudeAccountDir is the config directory saved Claude account user runs
+// Claude Code in, for a tool that starts Claude Code as that account itself
+// (CLAUDE_CONFIG_DIR); "" while it has none, as for the account Claude Code
+// is signed in to in its own directory.
+func ClaudeAccountDir(user string) string {
+	dir := claudeAccountDir(user)
+	if fi, err := os.Stat(dir); err != nil || !fi.IsDir() {
+		return ""
+	}
+	return dir
+}
+
 // claudeDirService is the keychain item Claude Code keeps its sign-in in
 // when CLAUDE_CONFIG_DIR is dir: its own name, told apart by the directory.
 func claudeDirService(dir string) string {

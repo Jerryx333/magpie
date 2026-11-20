@@ -338,6 +338,9 @@ type accountRow struct {
 	// of the key plan whose card this account's stands in for (#1515).
 	Alias string `json:"alias,omitempty"`
 	Seat  string `json:"seat,omitempty"`
+	// Dir is the config directory a saved Claude account runs Claude Code
+	// in (CLAUDE_CONFIG_DIR), when it has one of its own.
+	Dir string `json:"dir,omitempty"`
 }
 
 type quotaSpan = provider.QuotaSpan
@@ -372,6 +375,9 @@ func accountRows(ls []provider.Login, now time.Time) []accountRow {
 	for _, l := range ls {
 		r := accountRow{Agent: l.Agent, User: l.User, Plan: l.Plan, Active: l.Active, On: l.On, Windows: []quotaSpan{}, Lapsed: l.Lapsed}
 		r.Seat = provider.SeatNameOf(l.Agent, l.User)
+		if l.Agent == "claude" && !l.Active {
+			r.Dir = provider.ClaudeAccountDir(l.User)
+		}
 		r.Alias = cmp.Or(provider.AccountLabelOf(l.Agent, l.User), r.Seat)
 		for user, q := range usage[l.Agent] {
 			if !strings.EqualFold(user, l.User) {

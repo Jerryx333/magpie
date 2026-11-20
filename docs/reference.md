@@ -3274,6 +3274,11 @@ spend them and those that spend them first or last, `magpie quota credits
 never the account Codex is signed in to. The credits an account holds show beside its windows in `magpie quota`,
 `magpie accounts`, the Usage page and the menu bar panel.
 
+`magpie accounts --json` gives each saved Claude account that has a config
+directory of its own its `dir`, so another tool can start Claude Code as
+that account (`CLAUDE_CONFIG_DIR=<dir>`) without signing the agent in to
+it. The account Claude Code is signed in to has none.
+
 An account can have a name of your own, for telling apart seats the vendor
 names alike (a team's GLM seats under masked emails): click the account's
 name in its provider's editor, or `magpie accounts alias <agent> <email>
